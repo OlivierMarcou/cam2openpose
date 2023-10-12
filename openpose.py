@@ -3,6 +3,7 @@
 import cv2 as cv
 import numpy as np
 import argparse
+import os
 from datetime import datetime
 
 
@@ -93,7 +94,8 @@ while 1:
         break
     elif k%256 == 32:
         # SPACE pressed
+        directory = os.getcwd()
         img_name = "".join(datetime.utcnow().strftime('%Y-%m-%d-%H-%M-%S-%f')[:-3])
-        img_name = "C:\\Users\\Dester\\Documents\\opencv_frame_{}.png".format(img_name)
+        img_name = directory + "\\opencv_frame_{}.png".format(img_name)
         cv.imwrite(img_name, frame2)
         print("{} written!".format(img_name)) 
