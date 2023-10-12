@@ -4,6 +4,7 @@ import cv2 as cv
 import numpy as np
 import argparse
 import os
+import json
 from datetime import datetime
 
 
@@ -95,7 +96,15 @@ while 1:
     elif k%256 == 32:
         # SPACE pressed
         directory = os.getcwd()
-        img_name = "".join(datetime.utcnow().strftime('%Y-%m-%d-%H-%M-%S-%f')[:-3])
-        img_name = directory + "\\opencv_frame_{}.png".format(img_name)
+        datetimeStr = "".join(datetime.utcnow().strftime('%Y-%m-%d-%H-%M-%S-%f')[:-3])
+        img_name = directory + "\\opencv_frame_{}.png".format(datetimeStr)
         cv.imwrite(img_name, frame2)
-        print("{} written!".format(img_name)) 
+        jsonContent ={"width": frameWidth, "height": frameHeight, "keypoints": points}
+        jsonStr = json.dumps(jsonContent)
+        # the result is a JSON string:
+        print(jsonStr) 
+        jsonName = directory + "\\opencv_frame_{}.json".format(datetimeStr)
+        f = open(jsonName, "w")
+        f.write(jsonStr)
+        f.close()
+        print("{} written!".format(img_name + ' ' + jsonName)) 
