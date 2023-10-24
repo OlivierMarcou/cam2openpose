@@ -6,6 +6,7 @@ import argparse
 import os
 import json
 from datetime import datetime
+import time
 
 
 parser = argparse.ArgumentParser()
@@ -13,6 +14,7 @@ parser.add_argument('--input', help='Path to image or video. Skip to capture fra
 parser.add_argument('--thr', default=0.1, type=float, help='Threshold value for pose parts heat map')
 parser.add_argument('--width', default=600, type=int, help='Resize input to specific width.')
 parser.add_argument('--height', default=480, type=int, help='Resize input to specific height.')
+parser.add_argument('--cap', default=0, type=int, help='auto register')
 
 args = parser.parse_args()
 
@@ -87,14 +89,16 @@ while 1:
     cv.putText(frame2, '%.2fms' % (t / freq), (10, 20), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0))
 
     cv.imshow('OpenPose using OpenCV', frame2)
-    
+
     k = cv.waitKey(1)
     if k%256 == 27:
         # ESC pressed
         print("Escape hit, closing...")
         break
-    elif k%256 == 32:
+    elif k%256 == 32 or args.cap==1:
         # SPACE pressed
+
+        time.sleep(0.5)
         directory = os.getcwd()
         datetimeStr = "".join(datetime.utcnow().strftime('%Y-%m-%d-%H-%M-%S-%f')[:-3])
         img_name = directory + "\\save\\opencv_frame_{}.png".format(datetimeStr)
